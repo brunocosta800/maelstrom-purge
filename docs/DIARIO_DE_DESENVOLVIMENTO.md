@@ -26,7 +26,7 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 ---
 
 ## Capítulo 1 — "Commit inicial": a cidade vazia
-**Commit:** `2252980` · **Data:** 2026-09-14 · **IA usada:** ⟨preencher⟩
+**Commit:** `2252980` · **Data:** 2026-09-14 · **IA usada:** Claude (outra sessão, anterior a este diário). Confirmado pelo grupo para o shader S1; ⟨confirmar se também gerou o resto do código⟩
 
 **Prompt:** ⟨preencher — pedido para criar um FPS cyberpunk em Three.js⟩
 
@@ -104,7 +104,7 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 ---
 
 ## Capítulo 5 — "Melhoria dos inimigos e sistema de HP": agora eles mordem
-**Commit:** `ec79988` · **IA usada:** ⟨preencher⟩
+**Commit:** `ec79988` · **IA usada:** Claude (outra sessão). Confirmado pelo grupo para os shaders S2 e S3; ⟨confirmar o resto⟩
 
 **Antes:** zumbis encostavam no jogador e nada acontecia.
 

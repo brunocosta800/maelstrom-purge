@@ -18,6 +18,10 @@ Por isso os shaders ficam em arquivos `.js`: cada função monta um grafo de nó
 | `src/shaders/entities.js` | S3 inimigos, S2 partículas, S8 bolas de fogo, S9 portal, traçantes, halos, onda de choque |
 | `src/engine/renderer.js` | S10 pós-processamento (bloom + vinhetas) |
 
+**Resumo da origem:** S1, S2 e S3 foram gerados por **outra sessão do Claude** nos capítulos 1–5 (GLSL/WebGL) e
+convertidos para TSL/WebGPU pelo Claude Code no capítulo 7. Os shaders S4–S10 foram escritos pelo Claude Code no
+capítulo 7. O bloom é o `BloomNode` dos exemplos oficiais do Three.js (licença MIT).
+
 Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pause**), `accent` e
 `accent2` (cores da fase atual). Trocar a fase troca as cores de todos os shaders de uma vez.
 
@@ -26,7 +30,7 @@ Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pa
 ## Shaders herdados do jogo original (portados)
 
 ### S1 — Grade neon pulsante → "Totem" (`neonTotemMaterial`)
-- **Origem:** commit inicial `2252980`, GLSL — ⟨grupo: preencher se foi escrito pela IA ou adaptado de algum tutorial⟩.
+- **Origem:** **gerado por outra sessão do Claude** (IA usada pelo grupo antes deste diário), no commit inicial `2252980`, em GLSL.
 - **Original (GLSL):**
   ```glsl
   float grid  = sin(vUv.y * 50.0 + time * 5.0) * 0.5 + 0.5;
@@ -51,7 +55,7 @@ Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pa
   Preserva a "identidade" visual do jogo antigo dentro do novo.
 
 ### S2 — Partículas de sangue → sistema de partículas na GPU (`GPUParticles`)
-- **Origem:** commit `ec79988`, GLSL.
+- **Origem:** **gerado por outra sessão do Claude**, no commit `ec79988`, em GLSL.
 - **Original:** a cada tiro, um `THREE.Points` com um `ShaderMaterial` **novo**, e física no vertex shader:
   `pos = position + velocity*t; pos.y -= 25*t²/2; alpha = 1 - 2t; gl_PointSize = 15*(10/-z)`.
 - **Problemas no WebGPU:**
@@ -74,7 +78,7 @@ Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pa
   parede, explosões, rastro dos projéteis e a coluna de surgimento dos inimigos.
 
 ### S3 — Flash vermelho de dano → material dos inimigos (`enemyMaterial`)
-- **Origem:** commit `ec79988`, injeção de GLSL com `onBeforeCompile`:
+- **Origem:** **gerado por outra sessão do Claude**, no commit `ec79988`, como injeção de GLSL com `onBeforeCompile`:
   `gl_FragColor = mix(gl_FragColor, vec4(1,0,0,1), hitMix);`
 - **Problema:** `onBeforeCompile` não existe no WebGPU.
 - **Reescrita em TSL:** `MeshStandardNodeMaterial` com `colorNode` e `emissiveNode`. Mantém o mesmo
