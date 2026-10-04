@@ -18,10 +18,10 @@ const FILES = {
     plasma: new URL('../assets/Sci-Fi Gun Pack by @Quaternius/FBX/Ray Gun.fbx', import.meta.url).href,
     rail: new URL('../assets/Sci-Fi Gun Pack by @Quaternius/FBX/Sniper rifle.fbx', import.meta.url).href,
     lightning: new URL('../assets/Sci-Fi Gun Pack by @Quaternius/FBX/Lightning Gun.fbx', import.meta.url).href,
-    // assets originais do projeto (public/)
-    zombie: '/characterMedium.fbx',
-    zombieA: '/Textures/zombieA.png',
-    zombieC: '/Textures/zombieC.png',
+    // assets originais do projeto (public/) — BASE_URL para funcionar fora da raiz (GitHub Pages)
+    zombie: import.meta.env.BASE_URL + 'characterMedium.fbx',
+    zombieA: import.meta.env.BASE_URL + 'Textures/zombieA.png',
+    zombieC: import.meta.env.BASE_URL + 'Textures/zombieC.png',
 };
 
 export const assets = {};

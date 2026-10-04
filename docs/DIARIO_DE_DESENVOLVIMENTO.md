@@ -289,6 +289,23 @@ Todos os erros abaixo aconteceram de verdade nesta sessão, na ordem em que apar
 
 ---
 
+## Capítulo 8 — Publicação no GitHub Pages
+**Data:** 2026-10-04 · **IA usada:** Claude Code (Claude Opus 5.5)
+
+**Prompts (do grupo):** "faça commit em um repositorio novo, no meu github brunocosta800" → "agora, hospede no github pages"
+
+**Antes:** o jogo só rodava localmente (`npm run dev`).
+**Depois:** publicado em **https://brunocosta800.github.io/maelstrom-purge/**. Cada push na `main` gera um build e
+publica sozinho (`.github/workflows/deploy.yml`). O GitHub Pages usa HTTPS, que é obrigatório para o WebGPU funcionar.
+
+**Erros e correções:**
+| Problema | Causa | Correção |
+|---|---|---|
+| GitHub CLI (`gh`) não instalado: a IA não conseguia criar o repositório | — | O repositório foi criado pelo site, vazio; a IA adicionou o remote `bruno` e fez o push (o `origin` do colega ficou intacto) |
+| (preventivo) Arquivos não seriam encontrados no Pages | O site fica em `/maelstrom-purge/`, mas o código pedia `/characterMedium.fbx`, `/favicon.svg`… (raiz do domínio) | `vite.config.js` com `base: './'` e `import.meta.env.BASE_URL` para os arquivos de `public/`. Testado servindo o build num subcaminho local antes de publicar |
+
+---
+
 ## Comparação entre IAs
 
 Preencher sempre que a mesma tarefa for pedida a mais de uma IA (mesmo prompt).
@@ -306,4 +323,5 @@ Preencher sempre que a mesma tarefa for pedida a mais de uma IA (mesmo prompt).
 - [ ] Console sem erros (F12)
 - [ ] Sem internet as fontes caem para a reserva; o jogo funciona igual
 - [ ] Roteiro de demo sugerido: menu → Fase 1 (ondas, escopeta, execução com F) → menu → Fase 4 (chefe: onda de choque e fúria)
+- [ ] Versão online: https://brunocosta800.github.io/maelstrom-purge/ (abrir antes para o navegador baixar os ~25 MB de modelos)
 - [ ] Ter os vídeos `antes.mp4` e `depois.mp4` de reserva caso o PC da apresentação não tenha WebGPU
