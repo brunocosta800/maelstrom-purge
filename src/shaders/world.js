@@ -67,14 +67,21 @@ export function wallMaterial() {
     return m;
 }
 
-// Caixotes do depósito: madeira/metal escuro com listras de perigo
+// Caixotes: metal claro, faixa de perigo amarela/preta no topo e cantos em neon (bem visíveis no escuro)
 export function crateMaterial() {
-    const m = new THREE.MeshStandardNodeMaterial({ roughness: 0.7, metalness: 0.2 });
+    const m = new THREE.MeshStandardNodeMaterial({ roughness: 0.6, metalness: 0.35 });
     const p = wallUV();
-    const hazard = step(0.5, fract(p.x.add(p.y).mul(1.6)));
-    const edge = smoothstep(1.9, 2.0, p.y);
-    m.colorNode = mix(vec3(0.09, 0.08, 0.07), mix(vec3(0.02), vec3(0.6, 0.45, 0.02), hazard), edge);
-    m.emissiveNode = accent.mul(oneMinus(smoothstep(0.0, 0.05, abs(p.y.sub(1.2)))).mul(0.8));
+    // os caixotes ocupam [0,2 ; 3,8] m dentro de cada célula de 4 m
+    const local = fract(p.x.div(4.0)).mul(4.0);
+    const corner = max(oneMinus(smoothstep(0.0, 0.12, abs(local.sub(0.2)))), oneMinus(smoothstep(0.0, 0.12, abs(local.sub(3.8)))));
+    const band = smoothstep(1.7, 1.72, p.y).mul(oneMinus(smoothstep(2.0, 2.02, p.y)));
+    const stripes = step(0.5, fract(p.x.add(p.y).mul(1.25)));
+    const panel = mix(vec3(0.24, 0.22, 0.2), vec3(0.3, 0.28, 0.25), step(0.5, fract(p.y.mul(1.5))));
+    const hazard = mix(vec3(0.03), vec3(0.95, 0.72, 0.05), stripes);
+    m.colorNode = mix(panel, hazard, band);
+    m.emissiveNode = accent.mul(corner.mul(1.6))
+        .add(vec3(0.6, 0.45, 0.03).mul(band.mul(stripes).mul(0.5)))
+        .add(accent.mul(oneMinus(smoothstep(0.0, 0.04, abs(p.y.sub(0.3)))).mul(1.2)));
     return m;
 }
 

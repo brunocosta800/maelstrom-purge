@@ -4,7 +4,12 @@ import { wallMaterial, floorMaterial, lavaMaterial, neonTotemMaterial, crateMate
 
 export const CELL = 4;
 export const WALL_H = 6;
-const HEIGHTS = { '#': WALL_H, 'P': 8, 'c': 2.2 };
+// Tipo de cada célula. Antes o tipo era deduzido da altura (h === 2.2), mas o Float32Array guarda
+// 2.2 como 2.200000047683716 e os caixotes nunca eram desenhados: viravam "paredes invisíveis".
+const KIND = { FLOOR: 0, WALL: 1, TOTEM: 2, CRATE: 3 };
+const KIND_OF = { '#': KIND.WALL, 'P': KIND.TOTEM, 'c': KIND.CRATE };
+const HEIGHT_OF = [0, WALL_H, 8, 2.2];
+const INSET_OF = [0, 0, CELL * 0.2, CELL * 0.05]; // totens e caixotes não ocupam a célula inteira
 
 export class Level {
     constructor(def) {
@@ -13,6 +18,7 @@ export class Level {
         this.cols = Math.max(...def.map.map(r => r.length));
         this.height = new Float32Array(this.rows * this.cols);
         this.lava = new Uint8Array(this.rows * this.cols);
+        this.kind = new Uint8Array(this.rows * this.cols);
         this.flow = new Int16Array(this.rows * this.cols);
         this.flowFrom = -1;
         this.marks = { start: null, exit: null, spawns: [], items: [] };
@@ -21,7 +27,7 @@ export class Level {
             for (let c = 0; c < this.cols; c++) {
                 const ch = line[c] || '#';
                 const i = r * this.cols + c;
-                if (HEIGHTS[ch]) this.height[i] = HEIGHTS[ch];
+                if (KIND_OF[ch]) { this.kind[i] = KIND_OF[ch]; this.height[i] = HEIGHT_OF[KIND_OF[ch]]; }
                 if (ch === 'L') this.lava[i] = 1;
                 const p = this.cellCenter(c, r);
                 if (ch === 'S') this.marks.start = p;
@@ -41,19 +47,22 @@ export class Level {
     idx(c, r) { return (c < 0 || r < 0 || c >= this.cols || r >= this.rows) ? -1 : r * this.cols + c; }
     heightAt(c, r) { const i = this.idx(c, r); return i < 0 ? WALL_H : this.height[i]; }
     solid(c, r) { return this.heightAt(c, r) > 0; }
+    kindAt(c, r) { const i = this.idx(c, r); return i < 0 ? KIND.WALL : this.kind[i]; }
     isLava(x, z) { const i = this.idx(this.colOf(x), this.rowOf(z)); return i >= 0 && this.lava[i] === 1; }
 
     build(scene) {
         const wallM = wallMaterial(), totemM = neonTotemMaterial(), crateM = crateMaterial();
         const walls = [], totems = [], crates = [], lavas = [];
         for (let r = 0; r < this.rows; r++) for (let c = 0; c < this.cols; c++) {
-            const i = r * this.cols + c, h = this.height[i];
+            const i = r * this.cols + c, k = this.kind[i];
             const p = this.cellCenter(c, r);
-            if (h === WALL_H) {
-                // só cria paredes que têm pelo menos um vizinho livre (as internas nunca aparecem)
-                if ([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dc, dr]) => { const j = this.idx(c + dc, r + dr); return j >= 0 && this.height[j] === 0; })) walls.push(p);
-            } else if (h === 8) totems.push(p);
-            else if (h === 2.2) crates.push(p);
+            if (k === KIND.WALL) {
+                // só cria paredes com algum vizinho livre, inclusive na diagonal (as internas nunca aparecem)
+                let open = false;
+                for (let dr = -1; dr <= 1 && !open; dr++) for (let dc = -1; dc <= 1; dc++) { const j = this.idx(c + dc, r + dr); if (j >= 0 && this.height[j] === 0) { open = true; break; } }
+                if (open) walls.push(p);
+            } else if (k === KIND.TOTEM) totems.push(p);
+            else if (k === KIND.CRATE) crates.push(p);
             if (this.lava[i]) lavas.push(p);
         }
         const inst = (geo, mat, list, y) => {
@@ -111,7 +120,7 @@ export class Level {
             if (h <= minH || h <= y + 0.05) continue;
             // teste círculo × quadrado
             const cx = (c - this.cols / 2) * CELL, cz = (r - this.rows / 2) * CELL;
-            const shrink = h === 8 ? CELL * 0.2 : h === 2.2 ? CELL * 0.05 : 0;
+            const shrink = INSET_OF[this.kindAt(c, r)];
             const nx = Math.max(cx + shrink, Math.min(x, cx + CELL - shrink));
             const nz = Math.max(cz + shrink, Math.min(z, cz + CELL - shrink));
             if ((x - nx) ** 2 + (z - nz) ** 2 < rad * rad) return true;
@@ -135,11 +144,11 @@ export class Level {
             const tExit = Math.min(tmC, tmR);
             if (h > 0) {
                 // pilares e caixotes ocupam só parte da célula
-                const shrink = h === 8 ? CELL * 0.2 : h === 2.2 ? CELL * 0.05 : 0;
+                const shrink = INSET_OF[this.kindAt(c, r)];
                 const tIn = shrink ? this.boxEnter(o, d, c, r, shrink, t, tExit) : t;
                 if (tIn !== null) {
                     const yIn = o.y + d.y * tIn;
-                    if (yIn < h && yIn > -0.01) return this._res(out, tIn, axis, h === 8 ? 'totem' : 'wall');
+                    if (yIn < h && yIn > -0.01) return this._res(out, tIn, axis, this.kindAt(c, r) === KIND.TOTEM ? 'totem' : 'wall');
                     if (d.y < 0 && yIn >= h) {
                         const tTop = (h - o.y) / d.y;
                         if (tTop <= tExit) return this._res(out, tTop, 2, 'top');

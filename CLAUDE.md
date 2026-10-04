@@ -19,6 +19,7 @@ então todo prompt que altera o jogo precisa ser registrado.
 - `src/engine/` — renderer WebGPU + pós (bloom/vinhetas), áudio procedural, input.
 - `src/shaders/` — todos os shaders em TSL (`world.js` cenário, `entities.js` inimigos/partículas/efeitos).
 - `src/game/` — level (grade, DDA, BFS), levels (mapas ASCII + ondas), rig (animação procedural), enemies, weapons, player, projectiles, pickups, effects, assets.
+- Nunca deduza o tipo de célula/objeto comparando float com `===` (Float32Array guarda 2.2 como 2.2000000477): use `level.kind`.
 - Cuidado com TSL: não use nomes de variáveis que encubram funções importadas (`max`, `min`…); `assign` só dentro de `Fn()`; `smoothstep` sempre com borda0 < borda1.
 
 ## Evidências (antes/depois)

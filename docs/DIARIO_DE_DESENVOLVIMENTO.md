@@ -306,6 +306,48 @@ publica sozinho (`.github/workflows/deploy.yml`). O GitHub Pages usa HTTPS, que 
 
 ---
 
+## Capítulo 9 — As paredes invisíveis
+**Data:** 2026-10-04 · **IA usada:** Claude Code (Claude Opus 5.5)
+
+**Prompt (do grupo):** "tem algumas paredes invisiveis nas fases"
+
+**Antes:** em várias fases o jogador batia em obstáculos que não apareciam na tela. Os tiros também paravam no ar.
+
+| Antes: fase 2, nada à frente, mas bloqueia | Depois: o caixote aparece |
+|---|---|
+| ![](prints/cap09/antes_fase2_caixote_invisivel.png) | ![](prints/cap09/depois_fase2_caixote.png) |
+
+**Investigação (sem adivinhar):** a IA escreveu um teste ([`tools/captura/cen_walls.mjs`](../tools/captura/cen_walls.mjs))
+que, em cada fase, compara a **grade de colisão** com as **malhas desenhadas** e lista toda célula sólida que encosta
+no chão e não tem malha. Resultado: **os caixotes (`c`) nunca eram desenhados, em nenhuma fase** (6 na fase 1,
+24 na fase 2, 11 na fase 3 e 4 na fase 4). A colisão deles existia, então eram literalmente paredes invisíveis.
+
+**Causa: precisão de ponto flutuante.** A altura de cada célula ficava num `Float32Array`. O tipo da célula era
+deduzido da altura com `h === 2.2`, mas em 32 bits o 2,2 vira `2.200000047683716`: a comparação dava falso e o caixote
+nunca entrava na lista de desenho. O mesmo teste errado fazia a colisão e o tiro tratarem o caixote como um bloco
+de 4 m (o visual tem 3,6 m). Paredes (6) e totens (8) funcionavam porque são representados exatamente.
+
+**Correções:**
+1. Cada célula ganhou um **tipo explícito** (`kind`: chão, parede, totem, caixote). Altura e recuo vêm de tabelas
+   indexadas por esse tipo, e nenhuma lógica compara número de ponto flutuante com `===`.
+2. Paredes que só encostam no chão pela diagonal (cantos) também passaram a ser desenhadas, para não sobrar fresta.
+3. **Segundo problema, visto no print intermediário** ([`meio_caixote_escuro.png`](prints/cap09/meio_caixote_escuro.png)):
+   depois de corrigido, o caixote aparecia, mas era tão escuro que ainda parecia invisível. O material foi refeito:
+   metal mais claro, faixa de perigo amarela e preta no topo e cantos em neon na cor da fase.
+
+**Verificação:** o mesmo teste rodou de novo nas 4 fases e listou **0 células sólidas sem malha** e **0 pontos de
+colisão fantasma**. O build passou.
+
+| Fase 1 | Fase 3 |
+|---|---|
+| ![](prints/cap09/depois_fase1_caixote.png) | ![](prints/cap09/depois_fase3_caixote.png) |
+
+**Por que passou despercebido no capítulo 7:** os testes com o bot olhavam para inimigos e efeitos. Ninguém conferiu
+se cada obstáculo do mapa tinha uma malha. Fica a lição: **testar o que não aparece** (comparar colisão × visual), e
+não só o que aparece.
+
+---
+
 ## Comparação entre IAs
 
 Preencher sempre que a mesma tarefa for pedida a mais de uma IA (mesmo prompt).
