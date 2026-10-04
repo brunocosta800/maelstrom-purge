@@ -1,0 +1,10 @@
+{
+  "name": "maelstrom-captura",
+  "private": true,
+  "type": "module",
+  "description": "Grava gameplay e prints do jogo para o diário de desenvolvimento",
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "puppeteer-core": "^24.0.0"
+  }
+}

@@ -4,29 +4,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyberpunk FPS: Maelstrom Purge</title>
+    <title>Maelstrom Purge</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <!-- Tela Inicial de Pause / Loading -->
-    <div id="blocker">
-        <h1>MAELSTROM PURGE</h1>
-        <p>Clique para iniciar</p>
-        <p>WASD: Mover | Mouse: Olhar | 1, 2, 3: Trocar Arma | Clique/Segure: Atirar</p>
+    <!-- Carregamento -->
+    <div id="loading" class="screen">
+        <h1 class="logo">MAELSTROM<span>PURGE</span></h1>
+        <div class="bar"><div id="load-fill"></div></div>
+        <p id="load-text">Inicializando WebGPU…</p>
     </div>
 
-    <!-- Interface de Jogo (HUD) -->
-    <div id="hud">
-        <div id="crosshair"></div>
-        <div id="level-info">Fase 1: Totentanz</div>
-        <div id="enemy-info">Inimigos: 10 / 10</div>
-        <div id="weapon-info">Arma: Revólver</div>
-        <div id="player-hp"
-            style="position: absolute; bottom: 20px; left: 20px; color: #00ff44; font-size: 32px; font-weight: bold; text-shadow: 0 0 10px #00ff44;">
-            HP: 100</div>
+    <!-- Erro (sem WebGPU / falha de assets) -->
+    <div id="error" class="screen hidden">
+        <h1>ERRO</h1>
+        <p id="error-text"></p>
     </div>
 
-    <!-- O Vite vai injetar e processar o seu Javascript a partir daqui -->
+    <!-- Menu principal -->
+    <div id="menu" class="screen hidden">
+        <h1 class="logo">MAELSTROM<span>PURGE</span></h1>
+        <p class="tag">Night City. Os demônios da Maelstrom tomaram a cidade. Limpe tudo.</p>
+        <div class="menu-row">
+            <div class="col">
+                <h3>FASE</h3>
+                <div id="level-select" class="choices"></div>
+            </div>
+            <div class="col">
+                <h3>DIFICULDADE</h3>
+                <div id="diff-select" class="choices">
+                    <button data-diff="facil">Fácil</button>
+                    <button data-diff="normal" class="on">Normal</button>
+                    <button data-diff="pesadelo">Pesadelo</button>
+                </div>
+            </div>
+        </div>
+        <button id="start-btn" class="big">ENTRAR NA CARNIFICINA</button>
+        <div class="controls">
+            <span><b>WASD</b> mover</span><span><b>Mouse</b> mirar/atirar</span><span><b>Espaço</b> pular</span>
+            <span><b>Shift</b> dash</span><span><b>F</b> executar inimigo atordoado</span><span><b>1-6 / roda</b> armas</span>
+            <span><b>M</b> música</span><span><b>Esc</b> pausar</span>
+        </div>
+        <div id="backend-badge" class="badge"></div>
+    </div>
+
+    <!-- Overlay genérico (pausa, morte, fim de fase, vitória) -->
+    <div id="overlay" class="screen hidden">
+        <h1 id="ov-title"></h1>
+        <div id="ov-body"></div>
+        <p id="ov-hint" class="blink"></p>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+        <div id="crosshair"><i></i><i></i><i></i><i></i></div>
+        <div id="hitmarker"></div>
+        <div id="dash-pips"><i></i><i></i></div>
+        <div id="damage-dirs"></div>
+
+        <div id="top-left">
+            <div id="lvl-name"></div>
+            <div id="wave-info"></div>
+        </div>
+        <div id="top-right">
+            <div id="kills"></div>
+            <div id="timer"></div>
+            <div id="backend-mini" class="badge small"></div>
+        </div>
+        <div id="compass" class="hidden"><div id="compass-arrow">▲</div><span>PORTAL</span></div>
+        <div id="boss" class="hidden">
+            <div id="boss-name">ARQUIDEMÔNIO DO MAELSTROM</div>
+            <div class="boss-bar"><div id="boss-fill"></div></div>
+        </div>
+        <div id="messages"></div>
+        <div id="execute-hint" class="hidden">[F] EXECUTAR</div>
+
+        <div id="statusbar">
+            <div class="stat" id="st-hp"><label>SAÚDE</label><b id="hp">100</b></div>
+            <div class="stat" id="st-armor"><label>ARMADURA</label><b id="armor">0</b></div>
+            <div id="slots"></div>
+            <div class="stat right" id="st-ammo"><label id="ammo-label">MUNIÇÃO</label><b id="ammo">∞</b></div>
+            <div id="weapon-name"></div>
+        </div>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
 </body>
 
