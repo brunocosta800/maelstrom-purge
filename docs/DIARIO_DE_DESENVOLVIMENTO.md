@@ -86,7 +86,7 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 - Tiro automático segurando o botão (SMG).
 - **Som procedural** com Web Audio API: ruído branco filtrado + oscilador com queda de frequência,
   diferente por arma (revólver = bandpass, SMG = highpass/sawtooth, shotgun = lowpass/square).
-- **Muzzle flash**: `PointLight` presa à câmera que acende por alguns ms com cor por arma.
+- "Flash" do disparo: em vez de uma luz no cano, o código fazia **piscar a luz do teto da boate** (bug relatado pelo grupo e corrigido no capítulo 5 com uma luz dedicada presa à câmera).
 - HUD mostra nome da arma e cadência.
 
 **Erros e correções:** ⟨preencher⟩
