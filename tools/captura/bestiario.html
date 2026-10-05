@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <!-- Estúdio de retratos do bestiário: renderiza um inimigo (ou as armas) com os materiais reais do jogo,
      fundo transparente. Uso: /tools/captura/bestiario.html?t=imp  (zumbi, puglin, imp, impElite, boss, armas) -->
-<head><meta charset="UTF-8"><style>html,body{margin:0;background:transparent;overflow:hidden}</style></head>
+<head><meta charset="UTF-8"><style>html,body{margin:0;background:transparent;overflow:hidden}body.escuro{background:#0e070c}</style></head>
 <body>
 <script type="module">
 import * as THREE from 'three/webgpu';
@@ -50,6 +50,12 @@ if (t === 'armas') {
     const e = new Enemy(game, t, new THREE.Vector3(0, 0, 0));
     e.setFx('dissolve', 0);
     e.group.rotation.y = 0.45;
+    // estados do shader dos inimigos: ?fx=hit | stagger | dissolve
+    const fx = new URLSearchParams(location.search).get('fx');
+    if (fx) document.body.classList.add('escuro');
+    if (fx === 'hit') e.setFx('hit', 0.3);
+    if (fx === 'stagger') { e.setFx('stagger', 1); setTimeout(() => { gameTime.value = 1.144; }, 0); }
+    if (fx === 'dissolve') e.setFx('dissolve', 0.45);
     const T = TYPES[t];
     const poses = {
         zumbi: { walk: 1.2, stride: 0.7, lean: 0.25, armDown: 0.05, armsForward: 1.4, headRoll: 0.2 },

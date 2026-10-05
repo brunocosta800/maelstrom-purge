@@ -24,6 +24,31 @@ capítulo 7. O bloom é o `BloomNode` dos exemplos oficiais do Three.js (licenç
 Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pause**), `accent` e
 `accent2` (cores da fase atual). Trocar a fase troca as cores de todos os shaders de uma vez.
 
+
+## Galeria: cada shader isolado
+Geradas com o estúdio [`tools/captura/shaders.html`](../tools/captura/shaders.html), que renderiza um shader por vez
+com o código real do jogo (`node tools/captura/amostras.mjs docs/shaders`).
+
+| Totem (S1, do Gemini) | Paredes (S4) | Caixotes |
+|---|---|---|
+| ![](shaders/totem.png) | ![](shaders/parede.png) | ![](shaders/caixote.png) |
+| **Chão (S5)** | **Lava / ácido (S6)** | **Céu (S7)** |
+| ![](shaders/chao.png) | ![](shaders/lava.png) | ![](shaders/ceu.png) |
+| **Partículas (S2, do Gemini)** | **Bolas de fogo (S8)** | **Portal (S9)** |
+| ![](shaders/particulas.png) | ![](shaders/fogo.png) | ![](shaders/portal.png) |
+| **Raios e traçantes** | **Onda de choque** | |
+| ![](shaders/raios.png) | ![](shaders/onda.png) | |
+
+**Material dos inimigos (S3, do Gemini, evoluído):** normal · flash de dano · atordoado · dissolvendo
+
+| ![](shaders/inimigo_normal.png) | ![](shaders/inimigo_hit.png) | ![](shaders/inimigo_stagger.png) | ![](shaders/inimigo_dissolve.png) |
+|---|---|---|---|
+
+**Pós-processamento (S10):** normal com bloom · dano · cura · pausa
+
+| ![](shaders/pos_normal.png) | ![](shaders/pos_dano.png) | ![](shaders/pos_cura.png) | ![](shaders/pos_pausa.png) |
+|---|---|---|---|
+
 ---
 
 ## Shaders herdados do jogo original (portados)
