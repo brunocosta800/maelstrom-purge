@@ -1,6 +1,8 @@
 # Diário de Desenvolvimento — Maelstrom Purge
 
 FPS cyberpunk em Three.js + Vite, desenvolvido com auxílio de IAs para a disciplina de Computação Gráfica.
+
+**Grupo:** Alexsander Sudario · Bruno Costa · Felipe Martins · João Vitor · Vitor Hideki · Vinicius Binda
 Este diário conta a história do jogo **capítulo por capítulo**: o que foi pedido à IA, como o jogo era
 antes, como ficou depois, o que deu errado e como foi corrigido.
 
