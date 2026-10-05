@@ -18,8 +18,7 @@ Por isso os shaders ficam em arquivos `.js`: cada função monta um grafo de nó
 | `src/shaders/entities.js` | S3 inimigos, S2 partículas, S8 bolas de fogo, S9 portal, traçantes, halos, onda de choque |
 | `src/engine/renderer.js` | S10 pós-processamento (bloom + vinhetas) |
 
-**Resumo da origem:** S1 veio do **Gemini** no commit inicial; S2 e S3 surgiram no capítulo 5 (Gemini ou outra
-sessão do Claude ⟨confirmar⟩). Os três eram GLSL/WebGL e foram convertidos para TSL/WebGPU pelo Claude Code no capítulo 7. Os shaders S4–S10 foram escritos pelo Claude Code no
+**Resumo da origem:** S1 (commit inicial) e S2 e S3 (capítulo 5) foram gerados pelo **Gemini**. Os três eram GLSL/WebGL e foram convertidos para TSL/WebGPU pelo Claude Code no capítulo 7. Os shaders S4–S10 foram escritos pelo Claude Code no
 capítulo 7. O bloom é o `BloomNode` dos exemplos oficiais do Three.js (licença MIT).
 
 Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pause**), `accent` e
@@ -55,7 +54,7 @@ Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pa
   Preserva a "identidade" visual do jogo antigo dentro do novo.
 
 ### S2 — Partículas de sangue → sistema de partículas na GPU (`GPUParticles`)
-- **Origem:** commit `ec79988`, em GLSL, a partir do prompt "crie um efeito de flash e um efeito de partículas de sangue… utilizando shaders". IA: Gemini segundo `documentacao_jogo.md`; outra sessão do Claude segundo o grupo em conversa ⟨confirmar⟩.
+- **Origem:** commit `ec79988`, em GLSL, a partir do prompt "crie um efeito de flash e um efeito de partículas de sangue… utilizando shaders". IA: **Gemini**.
 - **Original:** a cada tiro, um `THREE.Points` com um `ShaderMaterial` **novo**, e física no vertex shader:
   `pos = position + velocity*t; pos.y -= 25*t²/2; alpha = 1 - 2t; gl_PointSize = 15*(10/-z)`.
 - **Problemas no WebGPU:**
@@ -78,7 +77,7 @@ Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pa
   parede, explosões, rastro dos projéteis e a coluna de surgimento dos inimigos.
 
 ### S3 — Flash vermelho de dano → material dos inimigos (`enemyMaterial`)
-- **Origem:** commit `ec79988`, mesmo prompt do S2 (mesma IA ⟨confirmar: Gemini ou outro Claude⟩), como injeção de GLSL com `onBeforeCompile`:
+- **Origem:** commit `ec79988`, mesmo prompt do S2, também no **Gemini**, como injeção de GLSL com `onBeforeCompile`:
   `gl_FragColor = mix(gl_FragColor, vec4(1,0,0,1), hitMix);`
 - **Problema:** `onBeforeCompile` não existe no WebGPU.
 - **Reescrita em TSL:** `MeshStandardNodeMaterial` com `colorNode` e `emissiveNode`. Mantém o mesmo

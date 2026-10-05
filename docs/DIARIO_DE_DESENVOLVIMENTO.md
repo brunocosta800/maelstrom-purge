@@ -135,7 +135,7 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 ---
 
 ## Capítulo 5 — "Melhoria dos inimigos e sistema de HP": agora eles mordem
-**Commit:** `ec79988` · **IA usada:** Gemini, segundo a documentação do grupo ⟨conflito: em conversa o grupo disse que os shaders vieram de outra sessão do Claude — confirmar⟩
+**Commit:** `ec79988` · **IA usada:** **Gemini** (confirmado pelo grupo)
 
 **Prompts** (Fonte: [`documentacao_jogo.md`](documentacao_jogo.md), escrita pelo grupo.):
 > "crie um efeito de flash e um efeito de partículas de sangue para rodar quando um inimigo for acertado utilizando shaders"
@@ -391,12 +391,12 @@ não só o que aparece.
 
 ## Comparação entre IAs
 
-| Aspecto | Gemini (cap. 1) | Gemini / outro Claude (cap. 2–5) ⟨confirmar⟩ | Claude Code (cap. 6–9) |
+| Aspecto | Gemini (cap. 1) | Gemini (caps. 2–5) | Claude Code (caps. 6–9) |
 |---|---|---|---|
 | Como foi usado | Um prompt grande pedindo o jogo inteiro | Um prompt por funcionalidade + prompts de correção com o erro colado | Prompts por etapa + prompt-mestre + `CLAUDE.md` |
 | Pré-requisito WebGPU | Gerou **WebGL** (o prompt dizia "webgpl", ambíguo) | Manteve WebGL; shaders em GLSL | Detectou o problema e migrou tudo para WebGPU/TSL |
 | Fidelidade ao pedido | Entregou base FPS, shader e 3 fases; **faltaram inimigos e a espada** | Cap. 5: HP do jogador, sangue (S2) e flash de dano (S3) | Entregou o pedido do cap. 7 inteiro (fases, dificuldade, chefe) |
-| Planejamento | — | ⟨confirmar se o `implementation_plan.md` do cap. 3 foi desta IA⟩ | Leu os assets e testou o rig antes de escrever o jogo |
+| Planejamento | — | Plano escrito antes de codar (`implementation_plan.md`, cap. 3) | Leu os assets e testou o rig antes de escrever o jogo |
 | Testes | O grupo rodava e relatava o erro (tela preta, console) | O grupo rodava e relatava (skin deslocada, flash global) | Build + navegador headless + bot jogando + teste colisão × visual |
 | Erros notáveis | Termo ambíguo virou a tecnologia errada | flipY invertido, flash fraco, avisos de erro removidos | 20+ registrados (ex.: `max is not a function`, caixotes invisíveis por precisão de float) |
 
