@@ -18,8 +18,8 @@ Por isso os shaders ficam em arquivos `.js`: cada função monta um grafo de nó
 | `src/shaders/entities.js` | S3 inimigos, S2 partículas, S8 bolas de fogo, S9 portal, traçantes, halos, onda de choque |
 | `src/engine/renderer.js` | S10 pós-processamento (bloom + vinhetas) |
 
-**Resumo da origem:** S1, S2 e S3 foram gerados por **outra sessão do Claude** nos capítulos 1–5 (GLSL/WebGL) e
-convertidos para TSL/WebGPU pelo Claude Code no capítulo 7. Os shaders S4–S10 foram escritos pelo Claude Code no
+**Resumo da origem:** S1 veio no commit inicial, gerado a partir do prompt ao **Gemini** ⟨confirmar⟩; S2 e S3 foram
+gerados por **outra sessão do Claude** no capítulo 5. Os três eram GLSL/WebGL e foram convertidos para TSL/WebGPU pelo Claude Code no capítulo 7. Os shaders S4–S10 foram escritos pelo Claude Code no
 capítulo 7. O bloom é o `BloomNode` dos exemplos oficiais do Three.js (licença MIT).
 
 Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pause**), `accent` e
@@ -30,7 +30,7 @@ Uniforms compartilhados (`world.js`): `gameTime` (tempo do jogo, **congela no pa
 ## Shaders herdados do jogo original (portados)
 
 ### S1 — Grade neon pulsante → "Totem" (`neonTotemMaterial`)
-- **Origem:** **gerado por outra sessão do Claude** (IA usada pelo grupo antes deste diário), no commit inicial `2252980`, em GLSL.
+- **Origem:** commit inicial `2252980`, em GLSL, gerado a partir do prompt ao **Gemini** que pedia "algum efeito de shader" ⟨grupo: confirmar; antes foi dito que era do Claude⟩.
 - **Original (GLSL):**
   ```glsl
   float grid  = sin(vUv.y * 50.0 + time * 5.0) * 0.5 + 0.5;

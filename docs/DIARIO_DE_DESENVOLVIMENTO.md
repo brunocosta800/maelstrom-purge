@@ -28,9 +28,24 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 ---
 
 ## Capítulo 1 — "Commit inicial": a cidade vazia
-**Commit:** `2252980` · **Data:** 2026-09-14 · **IA usada:** Claude (outra sessão, anterior a este diário). Confirmado pelo grupo para o shader S1; ⟨confirmar se também gerou o resto do código⟩
+**Commit:** `2252980` · **Data:** 2026-09-14 · **IA usada:** **Gemini** (Google)
 
-**Prompt:** ⟨preencher — pedido para criar um FPS cyberpunk em Three.js⟩
+**Prompt (do grupo, literal):**
+> "Eu preciso do código de um jogo de browser usando webgpl para o three.js que possua algum efeito de shader
+> O jogo será igual o jogo Doom, mas com uma estética cyberpunk, o jogo deve ser em primeira pessoa, com um arsenal
+> de 3 armas (um revolver, uma metralhadora e uma espada) os inimigos devem ser baseados na facção dos maelstrom do
+> jogo Cyberpunk 2077 e o jogo deve ter três fases, a primeira será em uma boate cyberpunk baseada no Totentanz do
+> Cyerpunk 2077, a segunda fase será um depósito e a última fase será em uma doca"
+
+**Pedido × entregue** (conferido no código do commit `2252980`):
+| Pedido no prompt | O que o commit inicial tem |
+|---|---|
+| Jogo de browser em Three.js, "webgpl" | Three.js com **`WebGLRenderer`**. O termo ambíguo "webgpl" virou WebGL, e não WebGPU |
+| Algum efeito de shader | ✅ `ShaderMaterial` com a grade neon pulsante (S1) nos blocos |
+| Primeira pessoa, estilo Doom, estética cyberpunk | ✅ `PointerLockControls`, WASD + pulo, neon vermelho |
+| 3 armas: revólver, metralhadora e **espada** | Revólver, submetralhadora e **escopeta**: a espada não veio ⟨grupo: confirmar se foi o Gemini ou se o grupo trocou⟩ |
+| Inimigos da Maelstrom | ❌ Nenhum inimigo; eles só chegaram nos capítulos 3–5 |
+| 3 fases: Totentanz, depósito e docas | 🟡 Os três nomes existem, mas as fases só mudam a quantidade de blocos |
 
 **Antes:** nada — projeto Vite vazio.
 
@@ -352,11 +367,18 @@ não só o que aparece.
 
 ## Comparação entre IAs
 
-Preencher sempre que a mesma tarefa for pedida a mais de uma IA (mesmo prompt).
+| Aspecto | Gemini (cap. 1) | Claude, outra sessão (cap. 5; ⟨confirmar caps. 2–4⟩) | Claude Code (cap. 6–9) |
+|---|---|---|---|
+| Como foi usado | Um prompt grande pedindo o jogo inteiro | ⟨grupo: preencher⟩ | Prompts por etapa + prompt-mestre + `CLAUDE.md` |
+| Pré-requisito WebGPU | Gerou **WebGL** (o prompt dizia "webgpl", ambíguo) | Manteve WebGL; shaders em GLSL | Detectou o problema e migrou tudo para WebGPU/TSL |
+| Fidelidade ao pedido | Entregou base FPS, shader e 3 fases; **faltaram inimigos e a espada** | Cap. 5: HP do jogador, sangue (S2) e flash de dano (S3) | Entregou o pedido do cap. 7 inteiro (fases, dificuldade, chefe) |
+| Planejamento | — | ⟨confirmar se o `implementation_plan.md` do cap. 3 foi desta IA⟩ | Leu os assets e testou o rig antes de escrever o jogo |
+| Testes | ⟨grupo: preencher⟩ | ⟨grupo: preencher⟩ | Build + navegador headless + bot jogando + teste colisão × visual |
+| Erros notáveis | Termo ambíguo virou a tecnologia errada | flipY invertido, flash fraco, avisos de erro removidos | 20+ registrados (ex.: `max is not a function`, caixotes invisíveis por precisão de float) |
 
-| Tarefa | IA | Funcionou de primeira? | Erros que cometeu | Correções necessárias | Qualidade do resultado | Observações |
-|---|---|---|---|---|---|---|
-| | | | | | | |
+**Conclusão parcial:** o resultado dependeu mais do **contexto dado** do que da IA. Com um prompt único e ambíguo
+("webgpl"), o Gemini gerou WebGL. Com o requisito escrito explicitamente (prompt-mestre e `CLAUDE.md`), o Claude Code
+manteve WebGPU em todas as etapas.
 
 ---
 
