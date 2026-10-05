@@ -22,7 +22,7 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 | Funcionamento no dia — 1,5 | [Checklist de apresentação](#checklist-para-o-dia-da-apresentação) |
 
 > Capítulos 1 a 5 foram **reconstruídos a partir do histórico do git** (2026-09-14). Os campos marcados
-> com `⟨preencher⟩` dependem da memória do grupo (prompt exato usado, qual IA). A partir do Capítulo 6,
+> com `⟨preencher⟩` dependem da memória do grupo (prompt exato usado, qual IA); os prompts vieram depois da documentação do grupo, [`documentacao_jogo.md`](documentacao_jogo.md). A partir do Capítulo 6,
 > tudo é registrado no momento em que acontece.
 
 ---
@@ -47,6 +47,17 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 | Inimigos da Maelstrom | ❌ Nenhum inimigo; eles só chegaram nos capítulos 3–5 |
 | 3 fases: Totentanz, depósito e docas | 🟡 Os três nomes existem, mas as fases só mudam a quantidade de blocos |
 
+**Outros prompts desta etapa** (Fonte: [`documentacao_jogo.md`](documentacao_jogo.md), escrita pelo grupo.):
+> "Quais são os passos e dependências que precisam ser configuradas para rodar esse projeto"
+
+> "Eu baixei o kit de modelos de assets de armas do kenny nl, como faço para colocar os modelos no jogo?"
+
+**Erros corrigidos antes do commit inicial** (o commit já tem as correções):
+| Erro | Prompt de correção (resumo) | Resposta da IA (trecho) | Correção |
+|---|---|---|---|
+| Tela preta, só o HUD aparecia | "…fica preso em uma tela preta apenas com algumas informações do HUD mas nada funciona" | "Nessas versões modernas, a iluminação passou a ser estritamente física. O valor 1.5 de intensidade do PointLight… agora equivale à luminosidade literal de uma vela" | `PointLight` de 1,5 para 1000 |
+| `Uncaught TypeError: controls.getObject is not a function at init (main.js:87:24)` | "…ao apertar as teclas 1, 2 e 3 do teclado o nome da arma não muda no HUD…" + o erro do console | "A função getObject() foi removida nas versões mais recentes do Three.js… o PointerLockControls manipula a câmera diretamente" | Câmera adicionada direto à cena |
+
 **Antes:** nada — projeto Vite vazio.
 
 **Depois:**
@@ -64,7 +75,7 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 ---
 
 ## Capítulo 2 — "tiro": as armas ganham personalidade
-**Commit:** `e571d3e` · **IA usada:** ⟨preencher⟩
+**Commit:** `e571d3e` · **IA usada:** Gemini (IA principal, segundo a documentação do grupo)
 
 **Prompt:** ⟨preencher⟩
 
@@ -85,7 +96,7 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 ---
 
 ## Capítulo 3 — "implementation plan dos inimigos": planejar antes de codar
-**Commit:** `d031403` · **IA usada:** ⟨preencher — o formato `implementation_plan.md` + `task.md` é típico de agentes de IA⟩
+**Commit:** `d031403` · **IA usada:** Gemini (IA principal, segundo a documentação do grupo)
 
 **Prompt:** ⟨preencher⟩
 
@@ -102,7 +113,10 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 ---
 
 ## Capítulo 4 — "inimigos inicial": os zumbis chegam
-**Commit:** `f2598f6` · **IA usada:** ⟨preencher⟩
+**Commit:** `f2598f6` · **IA usada:** Gemini (IA principal, segundo a documentação do grupo)
+
+**Prompt** (Fonte: [`documentacao_jogo.md`](documentacao_jogo.md), escrita pelo grupo.):
+> "Implementação de 10 inimigos no mapa utilizando o modelo 3D characterMedium.fbx localizado na pasta public/ e as skins zombieA.png e zombieC.png em public/Textures/, com animação procedural de zumbi, distribuição estratégica pelo mapa e integração com o sistema de combate/tiro."
 
 **Antes:** mapa sem nenhum inimigo; o tiro não acertava nada.
 
@@ -121,7 +135,17 @@ antes, como ficou depois, o que deu errado e como foi corrigido.
 ---
 
 ## Capítulo 5 — "Melhoria dos inimigos e sistema de HP": agora eles mordem
-**Commit:** `ec79988` · **IA usada:** Claude (outra sessão). Confirmado pelo grupo para os shaders S2 e S3; ⟨confirmar o resto⟩
+**Commit:** `ec79988` · **IA usada:** Gemini, segundo a documentação do grupo ⟨conflito: em conversa o grupo disse que os shaders vieram de outra sessão do Claude — confirmar⟩
+
+**Prompts** (Fonte: [`documentacao_jogo.md`](documentacao_jogo.md), escrita pelo grupo.):
+> "crie um efeito de flash e um efeito de partículas de sangue para rodar quando um inimigo for acertado utilizando shaders"
+
+Resposta: criação dos efeitos com `onBeforeCompile` (flash, S3) e vertex shader (sangue, S2).
+
+| Problema | Prompt de correção | Resposta da IA (trecho) |
+|---|---|---|
+| Skin dos zumbis deslocada | "A skin dos inimigos nesse código está renderizando de maneira errada, ficando deslocada no modelo do personagem…" | "…o erro está na função loadEnemyAssets(). Você configurou as texturas forçando o parâmetro flipY para false… os modelos no formato .fbx… exigem que o eixo Y seja invertido (true)" |
+| Flash parecia iluminação global | "O efeito do flash está acontecendo, mas ele parece mais uma iluminação global, faça com que a fonte do flash seja no cano da arma…" | "…o código anterior estava literalmente pegando a luz vermelha gigante do teto da boate… e fazendo ela piscar em branco!" → luz dedicada presa à câmera, na ponta da arma |
 
 **Antes:** zumbis encostavam no jogador e nada acontecia.
 
@@ -367,13 +391,13 @@ não só o que aparece.
 
 ## Comparação entre IAs
 
-| Aspecto | Gemini (cap. 1) | Claude, outra sessão (cap. 5; ⟨confirmar caps. 2–4⟩) | Claude Code (cap. 6–9) |
+| Aspecto | Gemini (cap. 1) | Gemini / outro Claude (cap. 2–5) ⟨confirmar⟩ | Claude Code (cap. 6–9) |
 |---|---|---|---|
-| Como foi usado | Um prompt grande pedindo o jogo inteiro | ⟨grupo: preencher⟩ | Prompts por etapa + prompt-mestre + `CLAUDE.md` |
+| Como foi usado | Um prompt grande pedindo o jogo inteiro | Um prompt por funcionalidade + prompts de correção com o erro colado | Prompts por etapa + prompt-mestre + `CLAUDE.md` |
 | Pré-requisito WebGPU | Gerou **WebGL** (o prompt dizia "webgpl", ambíguo) | Manteve WebGL; shaders em GLSL | Detectou o problema e migrou tudo para WebGPU/TSL |
 | Fidelidade ao pedido | Entregou base FPS, shader e 3 fases; **faltaram inimigos e a espada** | Cap. 5: HP do jogador, sangue (S2) e flash de dano (S3) | Entregou o pedido do cap. 7 inteiro (fases, dificuldade, chefe) |
 | Planejamento | — | ⟨confirmar se o `implementation_plan.md` do cap. 3 foi desta IA⟩ | Leu os assets e testou o rig antes de escrever o jogo |
-| Testes | ⟨grupo: preencher⟩ | ⟨grupo: preencher⟩ | Build + navegador headless + bot jogando + teste colisão × visual |
+| Testes | O grupo rodava e relatava o erro (tela preta, console) | O grupo rodava e relatava (skin deslocada, flash global) | Build + navegador headless + bot jogando + teste colisão × visual |
 | Erros notáveis | Termo ambíguo virou a tecnologia errada | flipY invertido, flash fraco, avisos de erro removidos | 20+ registrados (ex.: `max is not a function`, caixotes invisíveis por precisão de float) |
 
 **Conclusão parcial:** o resultado dependeu mais do **contexto dado** do que da IA. Com um prompt único e ambíguo

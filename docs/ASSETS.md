@@ -4,8 +4,8 @@
 |---|---|---|---|
 | `src/assets/Mobs/` — **Imp** e **Puglin** (GLB + texturas 2048², 3 variações de cor) | Quaternius — *Bestiary: Dungeon Monsters* (versão gratuita), enviado pelo grupo no Capítulo 7 | Quaternius Asset License v1.0 — uso livre (pessoal, educacional e comercial), sem crédito obrigatório; proibido revender os assets em si (ver `src/assets/Mobs/License_Standard.txt`) | Inimigos **Imp**, **Imp de Elite** (textura `BaseColor_3`), **Arquidemônio** (chefe, textura `BaseColor_2`, escala 3×) e **Puglin** |
 | `src/assets/Sci-Fi Gun Pack by @Quaternius/FBX/` — 7 armas | Quaternius — *Sci-Fi Gun Pack*, enviado pelo grupo no Capítulo 7 | Licença Quaternius (ver `License.docx` no pacote) | Pistola (`Pistol`), Escopeta (`LongPistol`), Metralhadora (`Rifle`), Canhão de Plasma (`Ray Gun`), Railgun (`Sniper rifle`), Lança-Raios (`Lightning Gun`) — na mão e como item no chão |
-| `public/characterMedium.fbx` + `public/Textures/zombieA.png`, `zombieC.png` | Commit inicial `2252980` — ⟨preencher origem⟩ | ⟨preencher⟩ | Inimigo **Zumbi** (mantido do jogo original) |
-| `public/revolver.glb`, `smg.glb`, `shotgun.glb` | Commit inicial `2252980` — ⟨preencher origem⟩ | ⟨preencher⟩ | **Não usados** desde o Capítulo 7 (substituídos pelo Sci-Fi Gun Pack); mantidos para o histórico |
+| `public/characterMedium.fbx` + `public/Textures/zombieA.png`, `zombieC.png` | Kenney.nl (segundo a documentação do grupo), commit inicial `2252980` | Kenney: CC0 (domínio público) | Inimigo **Zumbi** (mantido do jogo original) |
+| `public/revolver.glb`, `smg.glb`, `shotgun.glb` | Kit de armas do Kenney.nl (segundo a documentação do grupo) | Kenney: CC0 (domínio público) | **Não usados** desde o Capítulo 7 (substituídos pelo Sci-Fi Gun Pack); mantidos para o histórico |
 | Fontes *Chakra Petch* e *Rajdhani* | Google Fonts | SIL Open Font License | Interface (HUD e menus). Sem internet, o navegador usa uma fonte reserva |
 | Sons e música | Gerados em tempo real (Web Audio API), sem arquivos | — | Todos os efeitos sonoros e a trilha |
 
